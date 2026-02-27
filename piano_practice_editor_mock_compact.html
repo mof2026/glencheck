@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4eedf" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="ピアノ練習" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>ピアノ練習計画 UIモック（iPhone実運用）</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4eedf;
+      --paper: #fbf7ef;
+      --paper-2: #f7efe3;
+      --line: #d7ccb8;
+      --ink: #1f1f1f;
+      --muted: #665f55;
+      --accent: #6e5643;
+      --radius: 16px;
+      --radius-sm: 12px;
+      --shadow: 0 14px 36px rgba(55, 40, 26, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 15% 5%, rgba(255,255,255,0.6), transparent 42%),
+        radial-gradient(circle at 85% 10%, rgba(110,86,67,0.08), transparent 44%),
+        var(--bg);
+      color: var(--ink);
+      font-family: "Noto Serif JP", "Hiragino Mincho ProN", serif;
+    }
+
+    .wrap {
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 10px 10px 88px;
+    }
+
+    .topbar {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding: 4px 10px 2px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .topbar .center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-family: inherit;
+      font-weight: 500;
+      color: var(--ink);
+      font-size: 15px;
+      letter-spacing: 0.02em;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .topbar-date {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-left: auto;
+      min-width: 112px;
+      margin-right: 2px;
+      margin-top: 35px;
+      color: var(--muted);
+      font: inherit;
+      font-size: 12px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .topbar-date-text {
+      pointer-events: none;
+    }
+
+    .topbar-date-input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .shell {
+      border: 1px solid rgba(110, 86, 67, 0.14);
+      background: linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0.14));
+      border-radius: 20px;
+      padding: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .section {
+      background: var(--paper);
+      border: 1px solid rgba(110, 86, 67, 0.14);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+
+    .section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0.1));
+      border-bottom: 1px solid rgba(110, 86, 67, 0.08);
+    }
+
+    .section-head.compact {
+      border-bottom: none;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+
+    .section-meta {
+      font-size: 10px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .section-body {
+      padding: 10px 12px 12px;
+    }
+
+    .field-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    #extra-curves {
+      display: grid;
+      gap: 8px;
+    }
+
+    #extra-curves:not(:empty) {
+      margin-top: 8px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .field-row.with-tail {
+      grid-template-columns: 70px minmax(0, 1fr) 26px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .field {
+      border: 1px solid rgba(110, 86, 67, 0.16);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.72);
+      min-height: 34px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .field.date-field {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.68));
+      border-color: rgba(110, 86, 67, 0.22);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+      position: relative;
+      padding-right: 34px;
+    }
+
+    .field-input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-size: 12px;
+      padding: 0;
+      margin: 0;
+      outline: none;
+    }
+
+    .field-input[type="date"] {
+      min-height: 18px;
+      cursor: pointer;
+    }
+
+    .field-input[type="number"] {
+      width: 100%;
+    }
+
+    .daycount-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .day-shortcuts {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .day-shortcuts button {
+      border: 1px solid rgba(110, 86, 67, 0.16);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.55);
+      color: var(--ink);
+      font: inherit;
+      font-size: 10px;
+      padding: 4px 7px;
+      line-height: 1;
+    }
+
+    @media (max-width: 420px) {
+      .daycount-row {
+        grid-template-columns: 1fr;
+        gap: 5px;
+        align-items: stretch;
+      }
+
+      .daycount-row > .field {
+        min-width: 0;
+      }
+
+      .day-shortcuts {
+        justify-content: flex-end;
+      }
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 92px;
+      gap: 8px;
+    }
+
+    .inline-note {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .chips.align-right {
+      justify-content: flex-end;
+    }
+
+    .chip {
+      border: 1px solid rgba(110, 86, 67, 0.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.55);
+      padding: 5px 9px;
+      font-family: inherit;
+      font-weight: 400;
+      font-size: 10px;
+      line-height: 1;
+      color: var(--ink);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .chip:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .curve-tail-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(110, 86, 67, 0.16);
+      background: rgba(255,255,255,0.5);
+      color: var(--muted);
+      font: inherit;
+      font-size: 13px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .curve-tail-btn.clear-slot {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: rgba(110, 86, 67, 0.72);
+    }
+
+    .curve-tail-slot {
+      width: 26px;
+      height: 26px;
+      display: block;
+    }
+
+    .curve-tail-slot.placeholder {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .accordion-item {
+      border-top: 1px solid rgba(110, 86, 67, 0.08);
+      background: rgba(255,255,255,0.18);
+    }
+
+    .accordion-item:first-child {
+      border-top: none;
+    }
+
+    .accordion-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+
+    .accordion-title {
+      margin: 0;
+      font-size: 12px;
+      color: var(--ink);
+    }
+
+    .accordion-sub {
+      margin: 2px 0 0;
+      font-size: 10px;
+      color: var(--muted);
+      display: none;
+    }
+
+    .caret {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .accordion-body {
+      padding: 0 12px 10px;
+    }
+
+    .accordion-body > .chips + .practice-list {
+      margin-top: 8px;
+    }
+
+    .accordion-item.is-collapsed .accordion-body {
+      display: none;
+    }
+
+    .accordion-item.is-collapsed .caret {
+      transform: rotate(180deg);
+    }
+
+    .practice-mini {
+      border: 1px solid rgba(110, 86, 67, 0.12);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.42);
+      padding: 8px;
+      margin-top: 6px;
+    }
+
+    .practice-mini:first-child {
+      margin-top: 0;
+    }
+
+    .practice-mini .t {
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.3;
+    }
+
+    .practice-mini .d {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .practice-mini input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      outline: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .mini-tools {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .mini-tools span {
+      border: 1px solid rgba(110, 86, 67, 0.14);
+      border-radius: 999px;
+      padding: 3px 7px;
+      font-size: 9px;
+      color: var(--ink);
+      background: rgba(255,255,255,0.42);
+    }
+
+    .mini-tools button {
+      border: 1px solid rgba(110, 86, 67, 0.14);
+      border-radius: 999px;
+      padding: 3px 7px;
+      font: inherit;
+      font-size: 9px;
+      color: var(--ink);
+      background: rgba(255,255,255,0.42);
+      line-height: 1;
+      min-height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mini-tools button[data-row-action="up"],
+    .mini-tools button[data-row-action="down"] {
+      width: 22px;
+      padding: 0;
+    }
+
+    .quick-add {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      border: 1px solid rgba(110, 86, 67, 0.18);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.5);
+      padding: 9px 10px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--ink);
+      text-decoration: none;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .preview-strip {
+      border: 1px dashed rgba(110, 86, 67, 0.22);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.36);
+      padding: 8px;
+      margin-top: 8px;
+    }
+
+    .preview-strip .head {
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 35% repeat(4, 1fr);
+      border: 1px solid rgba(110, 86, 67, 0.14);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.36);
+    }
+
+    .preview-grid div {
+      min-height: 20px;
+      border-right: 1px solid rgba(110, 86, 67, 0.1);
+      border-bottom: 1px solid rgba(110, 86, 67, 0.1);
+      font-size: 8.5px;
+      line-height: 1.15;
+      padding: 2px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .preview-grid div:nth-child(5n) { border-right: none; }
+    .preview-grid .l {
+      justify-content: flex-start;
+      padding-left: 7px;
+    }
+    .preview-grid .h {
+      background: rgba(255,255,255,0.6);
+    }
+
+    .sticky {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+      background: linear-gradient(180deg, rgba(244,238,223,0), rgba(244,238,223,0.9) 30%, rgba(244,238,223,0.98));
+    }
+
+    .sticky-inner {
+      max-width: 430px;
+      margin: 0 auto;
+      display: grid;
+      gap: 6px;
+    }
+
+    .sticky-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .sticky-actions {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      position: absolute;
+      right: 20px;
+    }
+
+    .sticky-btn {
+      border-radius: 12px;
+      border: 1px solid rgba(110, 86, 67, 0.18);
+      padding: 8px 10px;
+      text-align: center;
+      font-size: 10px;
+      line-height: 1.15;
+      min-height: 34px;
+      background: rgba(255,255,255,0.68);
+      color: var(--ink);
+      box-shadow: 0 8px 20px rgba(55, 40, 26, 0.06);
+      text-decoration: none;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .sticky-btn.primary {
+      background: linear-gradient(180deg, rgba(110,86,67,0.14), rgba(110,86,67,0.06));
+      border-color: rgba(110, 86, 67, 0.28);
+      color: #2a211b;
+      width: min(188px, 100%);
+      min-height: 34px;
+      padding: 7px 12px;
+      flex: 0 1 auto;
+    }
+
+    .sticky-btn.subtle {
+      min-height: auto;
+      padding: 0;
+      font-size: 10px;
+      border-radius: 0;
+      color: rgba(42, 33, 27, 0.68);
+      background: transparent;
+      border-color: transparent;
+      box-shadow: none;
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .sticky-btn.subtle:hover {
+      color: rgba(42, 33, 27, 0.9);
+    }
+
+    .sticky-slash {
+      color: rgba(42, 33, 27, 0.34);
+      font-size: 10px;
+      line-height: 1;
+      padding: 0 5px;
+      user-select: none;
+    }
+
+    .sticky-status {
+      min-height: 14px;
+      text-align: center;
+      font-size: 9px;
+      color: var(--muted);
+      line-height: 1.2;
+    }
+
+    .candidate-sheet[hidden] {
+      display: none;
+    }
+
+    .candidate-sheet {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      background: rgba(28, 22, 18, 0.28);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 10px;
+      padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .candidate-sheet-panel {
+      width: min(430px, 100%);
+      max-height: min(78vh, 620px);
+      border-radius: 18px;
+      border: 1px solid rgba(110, 86, 67, 0.2);
+      background: linear-gradient(180deg, rgba(251,247,239,0.98), rgba(247,239,227,0.98));
+      box-shadow: 0 20px 40px rgba(30, 22, 16, 0.18);
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      overflow: hidden;
+    }
+
+    .candidate-sheet-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px 8px;
+      border-bottom: 1px solid rgba(110, 86, 67, 0.1);
+      background: rgba(255,255,255,0.38);
+    }
+
+    .candidate-sheet-title {
+      margin: 0;
+      font-size: 12px;
+      color: var(--ink);
+    }
+
+    .candidate-sheet-sub {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .candidate-sheet-close {
+      border: 1px solid rgba(110, 86, 67, 0.16);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.68);
+      color: var(--ink);
+      font: inherit;
+      font-size: 10px;
+      line-height: 1;
+      padding: 6px 9px;
+    }
+
+    .candidate-sheet-search {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(110, 86, 67, 0.08);
+      background: rgba(255,255,255,0.22);
+    }
+
+    .candidate-search-input {
+      width: 100%;
+      border: 1px solid rgba(110, 86, 67, 0.18);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.76);
+      padding: 8px 10px;
+      color: var(--ink);
+      font: inherit;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .candidate-sheet-body {
+      overflow: auto;
+      padding: 8px 12px 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .candidate-group + .candidate-group {
+      margin-top: 10px;
+    }
+
+    .candidate-group-head {
+      font-size: 10px;
+      color: var(--muted);
+      margin: 0 0 5px;
+      letter-spacing: 0.02em;
+    }
+
+    .candidate-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .candidate-option {
+      width: 100%;
+      text-align: left;
+      border: 1px solid rgba(110, 86, 67, 0.14);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.62);
+      padding: 8px 9px;
+      color: var(--ink);
+      font: inherit;
+      line-height: 1.3;
+    }
+
+    .candidate-option .name {
+      display: block;
+      font-size: 11px;
+    }
+
+    .candidate-option .desc {
+      display: block;
+      margin-top: 2px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .candidate-empty {
+      border: 1px dashed rgba(110, 86, 67, 0.18);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.35);
+      padding: 8px 9px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="center">練習計画書</div>
+      <label class="topbar-date" aria-label="作成日">
+        <span id="created-date-display" class="topbar-date-text">--/--/-- 作成</span>
+        <input id="created-date" class="topbar-date-input" type="date" />
+      </label>
+    </div>
+
+    <div class="shell">
+      <section id="practice-section" class="section">
+        <div class="section-body">
+          <div class="field-grid">
+            <div class="field-row">
+              <div class="label">開始日</div>
+              <div class="field date-field"><input id="start-date" class="field-input" type="date" /></div>
+            </div>
+            <div class="field-row">
+              <div class="label">日数</div>
+              <div class="daycount-row">
+                <div class="field"><select id="day-count" class="field-input"></select></div>
+                <div class="day-shortcuts" aria-label="よく使う日数">
+                  <button type="button" data-day="14">14</button>
+                  <button type="button" data-day="21">21</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2 class="section-title">曲</h2>
+        </div>
+        <div class="section-body">
+          <div class="field-grid">
+            <div class="field-row with-tail">
+              <div class="label">1曲目</div>
+              <div class="field"><input id="curve-0" class="field-input" type="text" value="インベンション8番" /></div>
+              <button type="button" class="curve-tail-btn clear-slot" data-clear-curve-slot="0" aria-label="1曲目を空欄にする" title="空欄にする">-</button>
+            </div>
+            <div class="field-row with-tail">
+              <div class="label">2曲目</div>
+              <div class="field"><input id="curve-1" class="field-input" type="text" value="シンフォニア12番" /></div>
+              <button type="button" class="curve-tail-btn clear-slot" data-clear-curve-slot="1" aria-label="2曲目を空欄にする" title="空欄にする">-</button>
+            </div>
+          </div>
+          <div id="extra-curves"></div>
+          <div class="chips align-right">
+            <button id="add-curve-btn" type="button" class="chip">＋曲を追加</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head compact">
+          <h2 class="section-title">練習内容</h2>
+        </div>
+
+        <div class="accordion-item" data-curve-index="0">
+          <div class="accordion-head">
+            <div>
+              <p class="accordion-title">インベンション8番</p>
+              <p class="accordion-sub">可変行 / 開いている</p>
+            </div>
+            <div class="caret">▲</div>
+          </div>
+          <div class="accordion-body">
+            <div class="chips" style="margin-top: 0;">
+              <button type="button" class="chip" data-add-mode="candidate">＋候補から追加</button>
+              <button type="button" class="chip" data-add-mode="new">＋新規追加</button>
+            </div>
+            <div class="practice-list">
+            <div class="practice-mini" data-curve-index="0" data-practice-index="0">
+              <p class="t"><input class="practice-title-input" type="text" value="右手練習" /></p>
+              <p class="d"><input class="practice-desc-input" type="text" value="テーマをゆっくり（♩=60 / 3回）" /></p>
+              <div class="mini-tools"><span>編集</span><span>差し替え</span><span>複製</span></div>
+            </div>
+
+            <div class="practice-mini" data-curve-index="0" data-practice-index="1">
+              <p class="t"><input class="practice-title-input" type="text" value="左手練習" /></p>
+              <p class="d"><input class="practice-desc-input" type="text" value="和声の流れ確認（音価を保つ）" /></p>
+              <div class="mini-tools"><span>編集</span><span>差し替え</span><span>複製</span></div>
+            </div>
+
+            <div class="practice-mini" data-curve-index="0" data-practice-index="2">
+              <p class="t"><input class="practice-title-input" type="text" value="ソプラノ＋バス" /></p>
+              <p class="d"><input class="practice-desc-input" type="text" value="2声で歌い方をそろえる" /></p>
+              <div class="mini-tools"><span>編集</span><span>差し替え</span><span>複製</span></div>
+            </div>
+
+            <div class="practice-mini" data-curve-index="0" data-practice-index="3">
+              <p class="t"><input class="practice-title-input" type="text" value="右手リズム" /></p>
+              <p class="d"><input class="practice-desc-input" type="text" value="手拍子→片手→原形" /></p>
+              <div class="mini-tools"><span>編集</span><span>差し替え</span><span>複製</span></div>
+            </div>
+
+            <div class="practice-mini" data-curve-index="0" data-practice-index="4">
+              <p class="t"><input class="practice-title-input" type="text" value="通し" /></p>
+              <p class="d"><input class="practice-desc-input" type="text" value="止まらず最後まで" /></p>
+              <div class="mini-tools"><span>編集</span><span>差し替え</span><span>複製</span></div>
+            </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="accordion-item" data-curve-index="1">
+          <div class="accordion-head">
+            <div>
+              <p class="accordion-title">シンフォニア12番</p>
+              <p class="accordion-sub">可変行 / 開いている</p>
+            </div>
+            <div class="caret">▲</div>
+          </div>
+          <div class="accordion-body">
+            <div class="chips" style="margin-top: 0;">
+              <button type="button" class="chip" data-add-mode="candidate">＋候補から追加</button>
+              <button type="button" class="chip" data-add-mode="new">＋新規追加</button>
+            </div>
+            <div class="practice-list">
+            <div class="practice-mini" data-curve-index="1" data-practice-index="0">
+              <p class="t"><input class="practice-title-input" type="text" value="右手練習" /></p>
+              <p class="d"><input class="practice-desc-input" type="text" value="フレーズごとに区切って確認" /></p>
+              <div class="mini-tools"><span>編集</span><span>差し替え</span><span>複製</span></div>
+            </div>
+
+            <div class="practice-mini" data-curve-index="1" data-practice-index="1">
+              <p class="t"><input class="practice-title-input" type="text" value="左手練習" /></p>
+              <p class="d"><input class="practice-desc-input" type="text" value="跳躍の位置を先読み" /></p>
+              <div class="mini-tools"><span>編集</span><span>差し替え</span><span>複製</span></div>
+            </div>
+
+            <div class="practice-mini" data-curve-index="1" data-practice-index="2">
+              <p class="t"><input class="practice-title-input" type="text" value="アルト＋バス" /></p>
+              <p class="d"><input class="practice-desc-input" type="text" value="内声を消さない" /></p>
+              <div class="mini-tools"><span>編集</span><span>差し替え</span><span>複製</span></div>
+            </div>
+
+            <div class="practice-mini" data-curve-index="1" data-practice-index="3">
+              <p class="t"><input class="practice-title-input" type="text" value="リズム練習" /></p>
+              <p class="d"><input class="practice-desc-input" type="text" value="付点↔均等で変換" /></p>
+              <div class="mini-tools"><span>編集</span><span>差し替え</span><span>複製</span></div>
+            </div>
+
+            <div class="practice-mini" data-curve-index="1" data-practice-index="4">
+              <p class="t"><input class="practice-title-input" type="text" value="通し" /></p>
+              <p class="d"><input class="practice-desc-input" type="text" value="流れ優先 / 止まらない" /></p>
+              <div class="mini-tools"><span>編集</span><span>差し替え</span><span>複製</span></div>
+            </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="extra-practice-sections"></div>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="sticky">
+    <div class="sticky-inner">
+      <div class="sticky-row">
+        <a id="open-print-btn" class="sticky-btn primary" href="./piano_practice_print_mock.html">印刷ページへ</a>
+        <div class="sticky-actions">
+          <button id="backup-export-btn" type="button" class="sticky-btn subtle">保存</button>
+          <span class="sticky-slash" aria-hidden="true">/</span>
+          <button id="backup-import-btn" type="button" class="sticky-btn subtle">復元</button>
+        </div>
+      </div>
+      <div id="sticky-status" class="sticky-status" aria-live="polite"></div>
+    </div>
+  </div>
+  <input id="backup-import-file" type="file" accept="application/json,.json" hidden />
+  <div id="candidate-sheet" class="candidate-sheet" hidden aria-hidden="true">
+    <div class="candidate-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="candidate-sheet-title">
+      <div class="candidate-sheet-head">
+        <div>
+          <p id="candidate-sheet-title" class="candidate-sheet-title">候補から追加</p>
+          <p id="candidate-sheet-sub" class="candidate-sheet-sub">曲ごとの候補を選択</p>
+        </div>
+        <button id="candidate-sheet-close" type="button" class="candidate-sheet-close">閉じる</button>
+      </div>
+      <div class="candidate-sheet-search">
+        <input id="candidate-search-input" class="candidate-search-input" type="search" placeholder="検索（例: 右手 / リズム / 通し）" />
+      </div>
+      <div class="candidate-sheet-body">
+        <div id="candidate-group-recent" class="candidate-group">
+          <p class="candidate-group-head">最近使った</p>
+          <div id="candidate-recent-list" class="candidate-list"></div>
+        </div>
+        <div class="candidate-group">
+          <p class="candidate-group-head">候補一覧</p>
+          <div id="candidate-master-list" class="candidate-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const STORAGE_KEY = "pianoPracticeMockState";
+      const MAX_COLS = 21;
+      const MAX_CURVES = 5;
+      const createdEl = document.getElementById("created-date");
+      const startEl = document.getElementById("start-date");
+      const dayEl = document.getElementById("day-count");
+      const curve0 = document.getElementById("curve-0");
+      const curve1 = document.getElementById("curve-1");
+      const extraWrap = document.getElementById("extra-curves");
+      const addCurveBtn = document.getElementById("add-curve-btn");
+      const dayShortcutBtns = document.querySelectorAll(".day-shortcuts button");
+      const printLinks = [document.getElementById("open-print-btn")];
+      const backupExportBtn = document.getElementById("backup-export-btn");
+      const backupImportBtn = document.getElementById("backup-import-btn");
+      const backupImportFile = document.getElementById("backup-import-file");
+      const stickyStatusEl = document.getElementById("sticky-status");
+      const accordionTitles = document.querySelectorAll(".accordion-title");
+      const editorShell = document.querySelector(".shell");
+      const extraPracticeSections = document.getElementById("extra-practice-sections");
+      const createdDateDisplayEl = document.getElementById("created-date-display");
+      const candidateSheet = document.getElementById("candidate-sheet");
+      const candidateSheetCloseBtn = document.getElementById("candidate-sheet-close");
+      const candidateSheetSub = document.getElementById("candidate-sheet-sub");
+      const candidateSearchInput = document.getElementById("candidate-search-input");
+      const candidateRecentList = document.getElementById("candidate-recent-list");
+      const candidateMasterList = document.getElementById("candidate-master-list");
+      const candidateRecentGroup = document.getElementById("candidate-group-recent");
+      const RECENT_CANDIDATE_KEY = "pianoPracticeMockRecentCandidates";
+      const RECENT_CANDIDATE_LIMIT = 8;
+      const CANDIDATE_LIBRARY = [
+        { id: "rh-slow", title: "右手練習", desc: "ゆっくり一定拍で（3回）" },
+        { id: "lh-slow", title: "左手練習", desc: "和声の流れを確認（音価を保つ）" },
+        { id: "hands-separate", title: "片手ずつ", desc: "指使いと運指の再確認" },
+        { id: "two-voices", title: "2声練習", desc: "主旋律と低声をそろえる" },
+        { id: "inner-voices", title: "内声確認", desc: "アルト/テナーを消さずに弾く" },
+        { id: "rhythm", title: "リズム練習", desc: "付点↔均等 / 手拍子→片手→原形" },
+        { id: "chunk", title: "部分練習", desc: "2小節ずつ区切って往復" },
+        { id: "leap", title: "跳躍確認", desc: "着地点を先読みしてから弾く" },
+        { id: "tempo-up", title: "テンポ上げ", desc: "メトロノームを+4ずつ" },
+        { id: "balance", title: "音量バランス", desc: "主旋律を少し前に出す" },
+        { id: "pedal", title: "ペダル確認", desc: "踏み替え位置だけを確認" },
+        { id: "through", title: "通し", desc: "止まらず最後まで / 流れ優先" },
+      ];
+      const candidateById = new Map(CANDIDATE_LIBRARY.map((c) => [c.id, c]));
+      const candidateUiState = { curveIndex: null };
+      let stickyStatusTimer = 0;
+
+      function todayLocalISO() {
+        const now = new Date();
+        const tz = now.getTimezoneOffset() * 60000;
+        return new Date(now - tz).toISOString().slice(0, 10);
+      }
+
+      function defaultState() {
+        const today = todayLocalISO();
+        return {
+          createdDate: today,
+          startDate: today,
+          dayCount: 21,
+          curves: ["インベンション8番", "シンフォニア12番"],
+          practices: [
+            [
+              ["右手練習", "テーマをゆっくり（♩=60 / 3回）"],
+              ["左手練習", "和声の流れ確認（音価を保つ）"],
+              ["ソプラノ＋バス", "2声で歌い方をそろえる"],
+              ["右手リズム", "手拍子→片手→原形"],
+              ["通し", "止まらず最後まで"],
+            ],
+            [
+              ["右手練習", "フレーズごとに区切って確認"],
+              ["左手練習", "跳躍の位置を先読み"],
+              ["アルト＋バス", "内声を消さない"],
+              ["リズム練習", "付点↔均等で変換"],
+              ["通し", "流れ優先 / 止まらない"],
+            ],
+          ],
+        };
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return defaultState();
+          const parsed = JSON.parse(raw);
+          const base = defaultState();
+          const curves = normalizeCurveSlots(Array.isArray(parsed.curves) ? parsed.curves : base.curves);
+          return {
+            createdDate: parsed.createdDate || base.createdDate,
+            startDate: parsed.startDate || base.startDate,
+            dayCount: Number(parsed.dayCount) || base.dayCount,
+            curves,
+            practices: Array.isArray(parsed.practices) ? parsed.practices : base.practices,
+            collapsedCurveIndices: Array.isArray(parsed.collapsedCurveIndices) ? parsed.collapsedCurveIndices : [],
+          };
+        } catch {
+          return defaultState();
+        }
+      }
+
+      let state = loadState();
+      // 日数は毎回 21 を初期値にする（保存値より初期値を優先）
+      state.dayCount = 21;
+
+      function clampDayCount(v) {
+        const n = Math.max(1, Math.min(MAX_COLS, Number(v) || 21));
+        return n;
+      }
+
+      function initDayCountOptions() {
+        if (!dayEl || dayEl.tagName !== "SELECT") return;
+        if (dayEl.options.length > 0) return;
+        for (let i = 14; i <= MAX_COLS; i++) {
+          const opt = document.createElement("option");
+          opt.value = String(i);
+          opt.textContent = String(i);
+          dayEl.appendChild(opt);
+        }
+      }
+
+      function normalizeCurveSlots(list) {
+        const raw = (Array.isArray(list) ? list : []).map((v) => String(v ?? "").trim());
+        while (raw.length < 2) raw.push("");
+        return raw;
+      }
+
+      function formatDateLabel(iso) {
+        if (!iso) return "--/--/-- 作成";
+        const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (!m) return `${iso} 作成`;
+        return `${m[1]}/${m[2]}/${m[3]} 作成`;
+      }
+
+      function syncCreatedDateDisplay() {
+        if (!createdDateDisplayEl) return;
+        createdDateDisplayEl.textContent = formatDateLabel(createdEl?.value || "");
+      }
+
+      function curveRow(index, value) {
+        const row = document.createElement("div");
+        row.className = "field-row with-tail";
+        row.dataset.curveIndex = String(index);
+        row.innerHTML = `
+          <div class="label">${index + 1}曲目</div>
+          <div class="field"><input class="field-input extra-curve-input" type="text" value=""></div>
+          <button type="button" class="curve-tail-btn" data-delete-curve-index="${index}" aria-label="${index + 1}曲目を削除">×</button>
+        `;
+        row.querySelector("input").value = value || "";
+        return row;
+      }
+
+      function renderExtraCurves() {
+        extraWrap.innerHTML = "";
+        for (let i = 2; i < state.curves.length; i++) {
+          extraWrap.appendChild(curveRow(i, state.curves[i]));
+        }
+      }
+
+      function getPracticeCards() {
+        return document.querySelectorAll(".practice-mini[data-curve-index]");
+      }
+
+      function extraPracticeSection(curveIndex, curveName) {
+        const safeName = curveName || `${curveIndex + 1}曲目`;
+        return `
+          <div class="accordion-item" data-curve-index="${curveIndex}">
+            <div class="accordion-head">
+              <div>
+                <p class="accordion-title">${escapeHtml(safeName)}</p>
+                <p class="accordion-sub">可変行 / 開いている</p>
+              </div>
+              <div class="caret">▲</div>
+            </div>
+            <div class="accordion-body">
+              <div class="chips" style="margin-top: 0;">
+                <button type="button" class="chip" data-add-mode="candidate">＋候補から追加</button>
+                <button type="button" class="chip" data-add-mode="new">＋新規追加</button>
+              </div>
+              <div class="practice-list"></div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderExtraPracticeSections() {
+        if (!extraPracticeSections) return;
+        extraPracticeSections.innerHTML = state.curves
+          .slice(2)
+          .map((name, i) => extraPracticeSection(i + 2, name))
+          .join("");
+        hydratePracticeControls();
+      }
+
+      function practiceRowHtml(curveIndex, practiceIndex) {
+        return `
+          <div class="practice-mini" data-curve-index="${curveIndex}" data-practice-index="${practiceIndex}">
+            <p class="t"><input class="practice-title-input" type="text" value="" /></p>
+            <p class="d"><input class="practice-desc-input" type="text" value="" /></p>
+            <div class="mini-tools"><span>編集</span><span>差し替え</span><span>複製</span></div>
+          </div>
+        `;
+      }
+
+      function syncPracticeRowsToState() {
+        ensurePracticesShape();
+        document.querySelectorAll(".accordion-item[data-curve-index]").forEach((accordion) => {
+          const curveIndex = Number(accordion.dataset.curveIndex || 0);
+          const rows = state.practices[curveIndex] || [];
+          const list = accordion.querySelector(".practice-list");
+          const sub = accordion.querySelector(".accordion-sub");
+          if (!list) return;
+          list.innerHTML = rows.map((_, i) => practiceRowHtml(curveIndex, i)).join("");
+          if (sub) sub.textContent = `${rows.length}行 / 開いている`;
+        });
+        hydratePracticeControls();
+      }
+
+      function syncAccordionTitles() {
+        if (accordionTitles[0]) accordionTitles[0].textContent = state.curves[0] || "1曲目";
+        if (accordionTitles[1]) accordionTitles[1].textContent = state.curves[1] || "2曲目";
+        extraPracticeSections?.querySelectorAll(".accordion-title").forEach((el, idx) => {
+          el.textContent = state.curves[idx + 2] || `${idx + 3}曲目`;
+        });
+      }
+
+      function render() {
+        createdEl.value = state.createdDate;
+        syncCreatedDateDisplay();
+        startEl.value = state.startDate;
+        dayEl.value = String(clampDayCount(state.dayCount));
+        curve0.value = state.curves[0] || "";
+        curve1.value = state.curves[1] || "";
+        renderExtraCurves();
+        if (addCurveBtn) {
+          addCurveBtn.disabled = state.curves.length >= MAX_CURVES;
+          addCurveBtn.textContent = state.curves.length >= MAX_CURVES ? "5曲まで" : "＋曲を追加";
+        }
+        renderExtraPracticeSections();
+        syncPracticeRowsToState();
+        syncAccordionTitles();
+        renderPracticeInputs();
+        applyCollapsedStateToDom();
+      }
+
+      function ensurePracticesShape() {
+        if (!Array.isArray(state.practices)) state.practices = [];
+        while (state.practices.length < state.curves.length) state.practices.push([]);
+        state.practices = state.practices.slice(0, state.curves.length);
+        state.practices = state.practices.map((set, curveIndex) => {
+          const fallback = defaultState().practices[curveIndex] || [
+            ["右手練習", ""], ["左手練習", ""], ["部分練習", ""], ["リズム練習", ""], ["通し", ""]
+          ];
+          const arr = Array.isArray(set) ? set.slice() : [];
+          if (arr.length === 0) arr.push(fallback[0] || ["", ""]);
+          return arr.map((r, i) => {
+            const fb = fallback[i] || ["", ""];
+            return [Array.isArray(r) ? (r[0] ?? fb[0]) : fb[0], Array.isArray(r) ? (r[1] ?? fb[1]) : fb[1]];
+          });
+        });
+      }
+
+      function renderPracticeInputs() {
+        ensurePracticesShape();
+        getPracticeCards().forEach((card) => {
+          const c = Number(card.dataset.curveIndex || 0);
+          const p = Number(card.dataset.practiceIndex || 0);
+          const [title, desc] = (state.practices[c] && state.practices[c][p]) || ["", ""];
+          const titleInput = card.querySelector(".practice-title-input");
+          const descInput = card.querySelector(".practice-desc-input");
+          if (titleInput) titleInput.value = title;
+          if (descInput) descInput.value = desc;
+        });
+      }
+
+      function normalizedCollapsedCurveIndices() {
+        const raw = Array.isArray(state.collapsedCurveIndices) ? state.collapsedCurveIndices : [];
+        return raw
+          .map((v) => Number(v))
+          .filter((v) => Number.isInteger(v) && v >= 0 && v < state.curves.length)
+          .filter((v, i, arr) => arr.indexOf(v) === i);
+      }
+
+      function applyCollapsedStateToDom() {
+        const closed = new Set(normalizedCollapsedCurveIndices());
+        document.querySelectorAll(".accordion-item[data-curve-index]").forEach((accordion) => {
+          const curveIndex = Number(accordion.dataset.curveIndex || NaN);
+          const collapsed = Number.isInteger(curveIndex) && closed.has(curveIndex);
+          accordion.classList.toggle("is-collapsed", collapsed);
+          const head = accordion.querySelector(".accordion-head");
+          const body = accordion.querySelector(".accordion-body");
+          const caret = accordion.querySelector(".caret");
+          const sub = accordion.querySelector(".accordion-sub");
+          if (head) head.setAttribute("aria-expanded", collapsed ? "false" : "true");
+          if (body) body.hidden = collapsed;
+          if (caret) caret.textContent = collapsed ? "▼" : "▲";
+          if (sub) {
+            const rowCount = accordion.querySelectorAll(".practice-mini").length;
+            sub.textContent = `${rowCount}行 / ${collapsed ? "閉じている" : "開いている"}`;
+          }
+        });
+      }
+
+      function escapeCandidateText(s) {
+        return String(s || "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+      }
+
+      function curveNameByIndex(curveIndex) {
+        return String(state.curves?.[curveIndex] || "").trim() || "この曲";
+      }
+
+      function loadRecentCandidateIds() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(RECENT_CANDIDATE_KEY) || "[]");
+          if (!Array.isArray(parsed)) return [];
+          return parsed.filter((id) => typeof id === "string" && candidateById.has(id));
+        } catch {
+          return [];
+        }
+      }
+
+      function saveRecentCandidateIds(ids) {
+        localStorage.setItem(RECENT_CANDIDATE_KEY, JSON.stringify(ids.slice(0, RECENT_CANDIDATE_LIMIT)));
+      }
+
+      function pushRecentCandidate(id) {
+        if (!candidateById.has(id)) return;
+        const next = loadRecentCandidateIds().filter((x) => x !== id);
+        next.unshift(id);
+        saveRecentCandidateIds(next);
+      }
+
+      function filteredCandidates(keyword) {
+        const q = String(keyword || "").trim().toLowerCase();
+        if (!q) return CANDIDATE_LIBRARY.slice();
+        return CANDIDATE_LIBRARY.filter((c) => `${c.title} ${c.desc}`.toLowerCase().includes(q));
+      }
+
+      function candidateButtonHtml(candidate) {
+        return `
+          <button type="button" class="candidate-option" data-candidate-id="${escapeCandidateText(candidate.id)}">
+            <span class="name">${escapeCandidateText(candidate.title)}</span>
+            <span class="desc">${escapeCandidateText(candidate.desc || "")}</span>
+          </button>
+        `;
+      }
+
+      function renderCandidateList(root, items, emptyText) {
+        if (!root) return;
+        root.innerHTML = items.length
+          ? items.map(candidateButtonHtml).join("")
+          : `<div class="candidate-empty">${escapeCandidateText(emptyText)}</div>`;
+      }
+
+      function renderCandidatePicker() {
+        const keyword = candidateSearchInput?.value || "";
+        const filtered = filteredCandidates(keyword);
+        const recent = loadRecentCandidateIds()
+          .map((id) => candidateById.get(id))
+          .filter(Boolean)
+          .filter((c) => !keyword || filtered.some((f) => f.id === c.id));
+
+        if (candidateRecentGroup) candidateRecentGroup.hidden = recent.length === 0;
+        renderCandidateList(candidateRecentList, recent, "まだ最近使った候補はありません");
+        renderCandidateList(candidateMasterList, filtered, "一致する候補がありません");
+      }
+
+      function openCandidatePicker(curveIndex) {
+        if (!candidateSheet) return;
+        if (!Number.isInteger(curveIndex) || curveIndex < 0) return;
+        candidateUiState.curveIndex = curveIndex;
+        if (candidateSheetSub) {
+          candidateSheetSub.textContent = `${curveNameByIndex(curveIndex)} に追加する候補を選択`;
+        }
+        if (candidateSearchInput) candidateSearchInput.value = "";
+        renderCandidatePicker();
+        candidateSheet.hidden = false;
+        candidateSheet.setAttribute("aria-hidden", "false");
+        requestAnimationFrame(() => candidateSearchInput?.focus());
+      }
+
+      function closeCandidatePicker() {
+        if (!candidateSheet) return;
+        candidateSheet.hidden = true;
+        candidateSheet.setAttribute("aria-hidden", "true");
+        candidateUiState.curveIndex = null;
+      }
+
+      function setStickyStatus(message) {
+        if (!stickyStatusEl) return;
+        stickyStatusEl.textContent = String(message || "");
+        if (stickyStatusTimer) clearTimeout(stickyStatusTimer);
+        if (!message) return;
+        stickyStatusTimer = setTimeout(() => {
+          if (stickyStatusEl.textContent === message) stickyStatusEl.textContent = "";
+        }, 2800);
+      }
+
+      function compactDateLabel(iso) {
+        const m = String(iso || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        return m ? `${m[1]}${m[2]}${m[3]}` : "";
+      }
+
+      function sanitizeFileLabelPart(value, fallback = "untitled") {
+        const s = String(value || "")
+          .trim()
+          .replace(/[\\/:*?"<>|]/g, " ")
+          .replace(/\s+/g, " ")
+          .slice(0, 24);
+        return s || fallback;
+      }
+
+      function backupFileName(sourceState) {
+        const s = sourceState && typeof sourceState === "object" ? sourceState : state;
+        const exportedStamp = (new Date()).toISOString().replace(/[:]/g, "-").slice(0, 16);
+        const startPart = compactDateLabel(s?.startDate);
+        const curvePart = sanitizeFileLabelPart(Array.isArray(s?.curves) ? (s.curves[0] || "1曲目") : "1曲目", "1曲目");
+        const parts = ["piano-practice-backup", exportedStamp];
+        if (startPart) parts.push(`start${startPart}`);
+        if (curvePart) parts.push(curvePart);
+        return `${parts.join("_")}.json`;
+      }
+
+      function exportBackupJson() {
+        save();
+        const currentState = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        const payload = {
+          app: "piano_practice_app_mock",
+          version: 1,
+          exportedAt: new Date().toISOString(),
+          state: currentState,
+          recentCandidateIds: loadRecentCandidateIds(),
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = backupFileName(currentState);
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+        setStickyStatus("JSONを保存しました");
+      }
+
+      function isIsoDateText(value) {
+        return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value);
+      }
+
+      function normalizeImportedPractices(practices, curveCount) {
+        if (!Array.isArray(practices)) return null;
+        return practices
+          .slice(0, Math.max(2, Math.min(MAX_CURVES, curveCount || practices.length)))
+          .map((set) => {
+            if (!Array.isArray(set)) return [];
+            return set
+              .filter((row) => Array.isArray(row))
+              .slice(0, 60)
+              .map((row) => [String(row[0] ?? ""), String(row[1] ?? "")]);
+          });
+      }
+
+      function sanitizeImportedState(data) {
+        if (!data || typeof data !== "object") return null;
+        if (!("curves" in data || "practices" in data || "startDate" in data || "createdDate" in data)) return null;
+
+        const base = defaultState();
+        const curvesInput = Array.isArray(data.curves) ? data.curves.slice(0, MAX_CURVES) : base.curves;
+        const curves = normalizeCurveSlots(curvesInput);
+        const practices = normalizeImportedPractices(data.practices, curves.length) ?? base.practices;
+        const dayCountRaw = Number(data.dayCount);
+        const dayCount = Number.isFinite(dayCountRaw) ? clampDayCount(dayCountRaw) : base.dayCount;
+        const createdDate = isIsoDateText(data.createdDate) ? data.createdDate : base.createdDate;
+        const startDate = isIsoDateText(data.startDate) ? data.startDate : (createdDate || base.startDate);
+        const collapsedCurveIndices = Array.isArray(data.collapsedCurveIndices)
+          ? data.collapsedCurveIndices
+              .filter((v) => Number.isInteger(v) && v >= 0 && v < curves.length)
+              .sort((a, b) => a - b)
+          : [];
+
+        return {
+          createdDate,
+          startDate,
+          dayCount,
+          curves,
+          practices,
+          collapsedCurveIndices,
+        };
+      }
+
+      function looksLikeEditorState(data) {
+        return !!sanitizeImportedState(data);
+      }
+
+      function applyBackupPayload(payload) {
+        const data = (payload && typeof payload === "object" && payload.state && typeof payload.state === "object")
+          ? payload.state
+          : payload;
+        const sanitizedState = sanitizeImportedState(data);
+        if (!sanitizedState) throw new Error("backup format");
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitizedState));
+        if (payload && Array.isArray(payload.recentCandidateIds)) {
+          saveRecentCandidateIds(
+            payload.recentCandidateIds
+              .filter((id) => typeof id === "string")
+              .filter((id) => candidateById.has(id))
+          );
+        }
+
+        state = loadState();
+        render();
+        save();
+        closeCandidatePicker();
+        setStickyStatus("JSONから復元しました");
+      }
+
+      function handleBackupFileSelected(e) {
+        const file = e.target?.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const text = String(reader.result || "");
+            if (text.length > 2_000_000) throw new Error("backup too large");
+            const parsed = JSON.parse(text);
+            applyBackupPayload(parsed);
+          } catch {
+            setStickyStatus("復元できませんでした（JSON形式を確認）");
+          } finally {
+            if (backupImportFile) backupImportFile.value = "";
+          }
+        };
+        reader.onerror = () => {
+          setStickyStatus("ファイルを読み込めませんでした");
+          if (backupImportFile) backupImportFile.value = "";
+        };
+        reader.readAsText(file, "utf-8");
+      }
+
+      function collectCurvesFromUI() {
+        const curves = [curve0.value.trim(), curve1.value.trim()];
+        extraWrap.querySelectorAll(".extra-curve-input").forEach((input) => curves.push(input.value.trim()));
+        state.curves = normalizeCurveSlots(curves);
+      }
+
+      function collectPracticesFromUI() {
+        ensurePracticesShape();
+        const rebuilt = state.practices.map(() => []);
+        getPracticeCards().forEach((card) => {
+          const c = Number(card.dataset.curveIndex || 0);
+          const p = Number(card.dataset.practiceIndex || 0);
+          const title = card.querySelector(".practice-title-input")?.value?.trim() || "";
+          const desc = card.querySelector(".practice-desc-input")?.value?.trim() || "";
+          if (!rebuilt[c]) rebuilt[c] = [];
+          rebuilt[c][p] = [title, desc];
+        });
+        state.practices = rebuilt.map((rows) =>
+          (Array.isArray(rows) ? rows : []).filter((row) => Array.isArray(row))
+        );
+        ensurePracticesShape();
+      }
+
+      function save() {
+        collectCurvesFromUI();
+        collectPracticesFromUI();
+        state.createdDate = createdEl.value || todayLocalISO();
+        state.startDate = startEl.value || state.createdDate;
+        state.dayCount = clampDayCount(dayEl.value);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        syncAccordionTitles();
+      }
+
+      function hydratePracticeControls() {
+        document.querySelectorAll(".mini-tools").forEach((tools) => {
+          if (tools.dataset.hydrated === "1") return;
+          tools.dataset.hydrated = "1";
+          tools.innerHTML = `
+            <button type="button" data-row-action="up">↑</button>
+            <button type="button" data-row-action="down">↓</button>
+            <button type="button" data-row-action="duplicate">複製</button>
+            <button type="button" data-row-action="delete">削除</button>
+          `;
+        });
+      }
+
+      createdEl.addEventListener("change", () => {
+        if (!startEl.value) startEl.value = createdEl.value;
+        syncCreatedDateDisplay();
+        save();
+      });
+      startEl.addEventListener("change", save);
+      dayEl.addEventListener("change", () => {
+        dayEl.value = String(clampDayCount(dayEl.value));
+        save();
+      });
+      dayShortcutBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          dayEl.value = btn.dataset.day || "21";
+          save();
+        });
+      });
+      [curve0, curve1].forEach((el) => {
+        el.addEventListener("input", save);
+        el.addEventListener("change", save);
+      });
+      extraWrap.addEventListener("input", save);
+      extraWrap.addEventListener("change", save);
+      extraWrap.addEventListener("click", (e) => {
+        const target = e.target instanceof HTMLElement ? e.target : null;
+        const btn = target?.closest?.("[data-delete-curve-index]");
+        if (!btn) return;
+        const curveIndex = Number(btn.getAttribute("data-delete-curve-index") || NaN);
+        if (!Number.isInteger(curveIndex) || curveIndex < 2) return;
+        collectCurvesFromUI();
+        collectPracticesFromUI();
+        state.curves.splice(curveIndex, 1);
+        if (Array.isArray(state.practices)) state.practices.splice(curveIndex, 1);
+        if (Array.isArray(state.collapsedCurveIndices)) {
+          state.collapsedCurveIndices = state.collapsedCurveIndices
+            .filter((idx) => idx !== curveIndex)
+            .map((idx) => (idx > curveIndex ? idx - 1 : idx));
+        }
+        ensurePracticesShape();
+        render();
+        save();
+      });
+      editorShell?.addEventListener("input", (e) => {
+        if (e.target && e.target.closest(".practice-mini")) save();
+      });
+      editorShell?.addEventListener("change", (e) => {
+        if (e.target && e.target.closest(".practice-mini")) save();
+      });
+      function dispatchAccordionToggleFromClick(target, e) {
+        const head = target?.closest?.(".accordion-head");
+        if (!head || target.closest("button, a, input, select, textarea, label")) return false;
+        const accordion = head.closest(".accordion-item[data-curve-index]");
+        const curveIndex = Number(accordion?.dataset.curveIndex || NaN);
+        if (!Number.isInteger(curveIndex) || curveIndex < 0) return true;
+        e.preventDefault();
+        document.dispatchEvent(new CustomEvent("piano-editor:toggle-accordion", {
+          detail: { curveIndex },
+        }));
+        return true;
+      }
+
+      function dispatchRowActionFromClick(target, e) {
+        const rowBtn = target?.closest?.("[data-row-action]");
+        if (!rowBtn) return false;
+        const row = rowBtn.closest(".practice-mini");
+        const accordion = rowBtn.closest(".accordion-item[data-curve-index]");
+        const action = rowBtn.getAttribute("data-row-action") || "";
+        const curveIndex = Number(accordion?.dataset.curveIndex || NaN);
+        const rowIndex = Number(row?.dataset.practiceIndex || NaN);
+        if (!Number.isInteger(curveIndex) || curveIndex < 0) return true;
+        if (!Number.isInteger(rowIndex) || rowIndex < 0) return true;
+        if (!action) return true;
+        e.preventDefault();
+        document.dispatchEvent(new CustomEvent("piano-editor:row-action", {
+          detail: { curveIndex, rowIndex, action },
+        }));
+        return true;
+      }
+
+      function handleRowActionRequest(e) {
+        const curveIndex = Number(e?.detail?.curveIndex);
+        const rowIndex = Number(e?.detail?.rowIndex);
+        const action = String(e?.detail?.action || "");
+        if (!Number.isInteger(curveIndex) || curveIndex < 0) return;
+        if (!Number.isInteger(rowIndex) || rowIndex < 0) return;
+        if (!action) return;
+
+        collectPracticesFromUI();
+        ensurePracticesShape();
+        if (!Array.isArray(state.practices[curveIndex])) state.practices[curveIndex] = [];
+        const rows = state.practices[curveIndex];
+        if (!Array.isArray(rows) || !Array.isArray(rows[rowIndex])) return;
+
+        if (action === "up" && rowIndex > 0) {
+          [rows[rowIndex - 1], rows[rowIndex]] = [rows[rowIndex], rows[rowIndex - 1]];
+        }
+        if (action === "down" && rowIndex < rows.length - 1) {
+          [rows[rowIndex + 1], rows[rowIndex]] = [rows[rowIndex], rows[rowIndex + 1]];
+        }
+        if (action === "duplicate") {
+          const [title, desc] = rows[rowIndex];
+          rows.splice(rowIndex + 1, 0, [String(title || ""), String(desc || "")]);
+        }
+        if (action === "delete") {
+          rows.splice(rowIndex, 1);
+          if (rows.length === 0) rows.push(["新しい練習", ""]);
+        }
+
+        render();
+        save();
+
+        const nextIndex = action === "duplicate"
+          ? rowIndex + 1
+          : Math.max(0, Math.min(rowIndex, (state.practices[curveIndex] || []).length - 1));
+        requestAnimationFrame(() => {
+          document
+            .querySelector(`.accordion-item[data-curve-index="${curveIndex}"] .practice-mini[data-practice-index="${nextIndex}"] .practice-title-input`)
+            ?.focus();
+        });
+      }
+
+      function handleAccordionToggleRequest(e) {
+        const curveIndex = Number(e?.detail?.curveIndex);
+        if (!Number.isInteger(curveIndex) || curveIndex < 0) return;
+        const closed = new Set(normalizedCollapsedCurveIndices());
+        if (closed.has(curveIndex)) closed.delete(curveIndex);
+        else closed.add(curveIndex);
+        state.collapsedCurveIndices = Array.from(closed).sort((a, b) => a - b);
+        applyCollapsedStateToDom();
+        save();
+      }
+
+      function handleCandidateAddRequest(e) {
+        const curveIndex = Number(e?.detail?.curveIndex);
+        const title = String(e?.detail?.title || "").trim();
+        const desc = String(e?.detail?.desc || "");
+        if (!Number.isInteger(curveIndex) || curveIndex < 0) return;
+        if (!title) return;
+
+        collectPracticesFromUI();
+        ensurePracticesShape();
+        if (!Array.isArray(state.practices[curveIndex])) state.practices[curveIndex] = [];
+        state.practices[curveIndex].push([title, desc]);
+        render();
+        save();
+        requestAnimationFrame(() => {
+          const accordion = document.querySelector(`.accordion-item[data-curve-index="${curveIndex}"]`);
+          const cards = accordion?.querySelectorAll(".practice-mini");
+          cards?.[cards.length - 1]?.querySelector(".practice-title-input")?.focus();
+        });
+      }
+
+      function handleCandidateSheetClick(e) {
+        const target = e.target instanceof HTMLElement ? e.target : null;
+        if (!target) return;
+        if (target === candidateSheet) {
+          closeCandidatePicker();
+          return;
+        }
+        const btn = target.closest("[data-candidate-id]");
+        if (!btn) return;
+        const curveIndex = Number(candidateUiState.curveIndex);
+        const candidate = candidateById.get(btn.getAttribute("data-candidate-id") || "");
+        if (!Number.isInteger(curveIndex) || curveIndex < 0 || !candidate) return;
+        pushRecentCandidate(candidate.id);
+        document.dispatchEvent(new CustomEvent("piano-editor:add-candidate", {
+          detail: {
+            curveIndex,
+            candidateId: candidate.id,
+            title: candidate.title,
+            desc: candidate.desc || "",
+          },
+        }));
+        closeCandidatePicker();
+      }
+
+      function handleCandidateSheetEscape(e) {
+        if (e.key !== "Escape") return;
+        if (!candidateSheet || candidateSheet.hidden) return;
+        e.preventDefault();
+        closeCandidatePicker();
+      }
+
+      function handleAddModeClick(target, e) {
+        const chip = target?.closest?.("[data-add-mode]");
+        if (!chip) return false;
+        const accordion = chip.closest(".accordion-item[data-curve-index]");
+        if (!accordion) return true;
+        const curveIndex = Number(accordion.dataset.curveIndex || 0);
+        const mode = chip.getAttribute("data-add-mode") || "";
+        if (!Number.isInteger(curveIndex) || curveIndex < 0) return true;
+
+        if (mode === "candidate") {
+          e.preventDefault();
+          openCandidatePicker(curveIndex);
+          return true;
+        }
+
+        if (mode === "new") {
+          e.preventDefault();
+          collectPracticesFromUI();
+          ensurePracticesShape();
+          if (!Array.isArray(state.practices[curveIndex])) state.practices[curveIndex] = [];
+          state.practices[curveIndex].push(["新しい練習", ""]);
+          render();
+          save();
+          requestAnimationFrame(() => {
+            const nextAccordion = document.querySelector(`.accordion-item[data-curve-index="${curveIndex}"]`);
+            const cards = nextAccordion?.querySelectorAll(".practice-mini");
+            cards?.[cards.length - 1]?.querySelector(".practice-title-input")?.focus();
+          });
+          return true;
+        }
+        return false;
+      }
+
+      editorShell?.addEventListener("click", (e) => {
+        const target = e.target instanceof HTMLElement ? e.target : e.target?.parentElement;
+        if (!target) return;
+        if (dispatchAccordionToggleFromClick(target, e)) return;
+        if (dispatchRowActionFromClick(target, e)) return;
+        handleAddModeClick(target, e);
+      });
+      document.addEventListener("piano-editor:row-action", handleRowActionRequest);
+      document.addEventListener("piano-editor:toggle-accordion", handleAccordionToggleRequest);
+      document.addEventListener("piano-editor:add-candidate", handleCandidateAddRequest);
+      candidateSheetCloseBtn?.addEventListener("click", closeCandidatePicker);
+      candidateSheet?.addEventListener("click", handleCandidateSheetClick);
+      candidateSearchInput?.addEventListener("input", renderCandidatePicker);
+      document.addEventListener("keydown", handleCandidateSheetEscape);
+      backupExportBtn?.addEventListener("click", exportBackupJson);
+      backupImportBtn?.addEventListener("click", () => backupImportFile?.click());
+      backupImportFile?.addEventListener("change", handleBackupFileSelected);
+
+      addCurveBtn.addEventListener("click", () => {
+        collectCurvesFromUI();
+        if (state.curves.length >= MAX_CURVES) return;
+        state.curves.push("");
+        ensurePracticesShape();
+        render();
+        const inputs = extraWrap.querySelectorAll(".extra-curve-input");
+        const last = inputs[inputs.length - 1];
+        if (last) last.focus();
+      });
+
+      document.querySelectorAll("[data-clear-curve-slot]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const slot = Number(btn.getAttribute("data-clear-curve-slot") || NaN);
+          if (!Number.isInteger(slot) || slot < 0 || slot > 1) return;
+          collectCurvesFromUI();
+          state.curves[slot] = "";
+          state.curves = normalizeCurveSlots(state.curves);
+          render();
+          save();
+          (slot === 0 ? curve0 : curve1)?.focus();
+        });
+      });
+
+      printLinks.forEach((a) => a && a.addEventListener("click", save));
+
+      if (!state.createdDate) state.createdDate = todayLocalISO();
+      if (!state.startDate) state.startDate = state.createdDate;
+      initDayCountOptions();
+      render();
+      save();
+
+      function escapeHtml(s) {
+        return String(s)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>ピアノ練習計画 フォント見本</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=BIZ+UDPMincho:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4eedf;
+      --card: #fbf7ef;
+      --ink: #1f1f1f;
+      --muted: #5b554e;
+      --line: #d7ccb8;
+      --accent: #6e5643;
+      --shadow: 0 10px 30px rgba(66, 44, 28, 0.08);
+      --radius: 16px;
+      --grid-h: 38px;
+      --left-col: 44%;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,0.55), transparent 40%),
+        radial-gradient(circle at 85% 12%, rgba(110,86,67,0.08), transparent 45%),
+        var(--bg);
+      font-family: "Noto Sans JP", "Hiragino Sans", sans-serif;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 20px 14px 28px;
+    }
+
+    .hero {
+      background: linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0.15));
+      border: 1px solid rgba(110, 86, 67, 0.12);
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.3;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+    }
+
+    .hero p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.55);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .specimen {
+      background: var(--card);
+      border: 1px solid rgba(110, 86, 67, 0.16);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .specimen-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid rgba(110, 86, 67, 0.1);
+      background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0));
+    }
+
+    .specimen-head h2 {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.2;
+      color: var(--accent);
+    }
+
+    .specimen-head .meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .phone-ui {
+      padding: 12px;
+      border-bottom: 1px solid rgba(110, 86, 67, 0.08);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.38), rgba(255,255,255,0.1));
+    }
+
+    .phone-shell {
+      border: 1px solid rgba(110, 86, 67, 0.18);
+      border-radius: 18px;
+      background: #f7f0e3;
+      padding: 10px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
+    }
+
+    .phone-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .phone-card {
+      background: #fbf7ef;
+      border: 1px solid rgba(110, 86, 67, 0.14);
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+
+    .phone-title {
+      margin: 0 0 8px;
+      font-size: 15px;
+      line-height: 1.3;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 68px 1fr;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 11px;
+    }
+
+    .row:last-child { margin-bottom: 0; }
+
+    .label { color: var(--muted); }
+
+    .field {
+      min-height: 27px;
+      border: 1px solid rgba(110, 86, 67, 0.16);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.72);
+      padding: 5px 8px;
+      display: flex;
+      align-items: center;
+      font-size: 11px;
+    }
+
+    .field.small { width: 72px; }
+
+    .toolbar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .btn {
+      border: 1px solid rgba(110, 86, 67, 0.2);
+      background: rgba(255,255,255,0.66);
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 10px;
+      line-height: 1;
+    }
+
+    .mini-item {
+      border: 1px solid rgba(110, 86, 67, 0.12);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.55);
+      padding: 8px;
+      margin-bottom: 6px;
+    }
+
+    .mini-item:last-child { margin-bottom: 0; }
+
+    .mini-item .line1 {
+      font-size: 12px;
+      margin: 0 0 2px;
+    }
+
+    .mini-item .line2 {
+      font-size: 10px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .print-preview {
+      padding: 12px;
+      background: #fff;
+    }
+
+    .sheet {
+      border: 1px solid #ddd;
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      overflow: auto;
+    }
+
+    .sheet-inner {
+      min-width: 920px;
+    }
+
+    .sheet-date {
+      font-size: 11px;
+      margin-bottom: 6px;
+      color: #222;
+    }
+
+    table.plan {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 11px;
+      color: #111;
+      background: #fff;
+    }
+
+    table.plan col.left { width: var(--left-col); }
+    table.plan col.day { width: auto; }
+
+    table.plan td {
+      border: 1px solid #d3d3d3;
+      vertical-align: top;
+      padding: 0;
+      height: var(--grid-h);
+    }
+
+    table.plan .left-cell {
+      padding: 6px 8px;
+    }
+
+    table.plan .section-head td {
+      height: 30px;
+      vertical-align: middle;
+    }
+
+    table.plan .section-left {
+      padding: 6px 8px;
+      font-size: 11px;
+    }
+
+    table.plan .day {
+      text-align: center;
+      vertical-align: middle;
+      font-size: 10px;
+      color: #222;
+      white-space: nowrap;
+    }
+
+    .practice-wrap {
+      padding-left: 0.9em; /* 曲見出し配下を少し右に */
+      line-height: 1.25;
+    }
+
+    .practice-title {
+      margin: 0;
+      font-size: 11px;
+      color: #111;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .practice-desc {
+      margin: 2px 0 0;
+      font-size: 10px;
+      color: #333;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .blank {
+      background:
+        linear-gradient(to right, transparent 0, transparent 100%);
+    }
+
+    .family-a .ui-heading, .family-a .sheet-curve {
+      font-family: "Noto Serif JP", "Hiragino Mincho ProN", serif;
+    }
+    .family-a .ui-body, .family-a .plan {
+      font-family: "Noto Sans JP", "Hiragino Sans", sans-serif;
+    }
+
+    .family-b .ui-heading, .family-b .sheet-curve {
+      font-family: "BIZ UDPMincho", "Hiragino Mincho ProN", serif;
+    }
+    .family-b .ui-body, .family-b .plan {
+      font-family: "BIZ UDPGothic", "Hiragino Sans", sans-serif;
+    }
+
+    .family-c .ui-heading, .family-c .sheet-curve {
+      font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+    }
+    .family-c .ui-body, .family-c .plan {
+      font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+    }
+
+    .family-d .ui-heading,
+    .family-d .ui-body,
+    .family-d .plan,
+    .family-d .sheet-date {
+      font-family: "Noto Serif JP", "Hiragino Mincho ProN", serif;
+    }
+
+    .family-d {
+      --left-col: 36%;
+      --grid-h: 34px;
+    }
+
+    .family-d table.plan .left-cell {
+      padding: 5px 6px;
+    }
+
+    .family-d table.plan .section-left {
+      padding: 5px 6px;
+    }
+
+    @media (min-width: 980px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .sheet-inner {
+        min-width: 0;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        color: #000;
+      }
+      .hero {
+        box-shadow: none;
+        border-color: #ddd;
+        background: #fff;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .specimen {
+        box-shadow: none;
+        border-color: #ccc;
+        break-inside: avoid;
+        margin-bottom: 12px;
+      }
+      .phone-ui {
+        background: #fff;
+      }
+      .sheet {
+        border: none;
+        padding: 0;
+      }
+      .sheet-inner {
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero ui-body">
+      <h1 class="ui-heading">ピアノ練習計画 フォント見本（画面＋印刷）</h1>
+      <p>
+        同じ内容を3パターンのフォントで比較しています。上段は iPhone 編集画面イメージ、下段は印刷チェック表イメージです。
+      </p>
+      <div class="controls">
+        <span class="chip">曲見出しの下はインデントあり</span>
+        <span class="chip">タイトル＋説明は同じインデント</span>
+        <span class="chip">印刷は空マスのみ（□なし）</span>
+      </div>
+    </section>
+
+    <main class="grid">
+      <section class="specimen family-a">
+        <header class="specimen-head">
+          <h2 class="ui-heading">A. Noto Serif JP + Noto Sans JP</h2>
+          <p class="meta ui-body">上品クラシカル（推し）</p>
+        </header>
+        <div class="phone-ui ui-body">
+          <div class="phone-shell">
+            <div class="phone-top">
+              <span>← 編集</span><span>保存</span>
+            </div>
+            <div class="phone-card">
+              <h3 class="phone-title ui-heading">練習計画</h3>
+              <div class="row"><div class="label">作成日</div><div class="field">2026/02/24</div></div>
+              <div class="row"><div class="label">開始日</div><div class="field">2026/02/25</div></div>
+              <div class="row"><div class="label">日数</div><div class="field small">10日</div></div>
+            </div>
+            <div class="phone-card">
+              <div class="toolbar">
+                <div class="btn ui-body">＋候補から追加</div>
+                <div class="btn ui-body">＋新規</div>
+              </div>
+              <div class="mini-item">
+                <p class="line1 ui-heading">曲1：インベンション8番</p>
+                <p class="line2 ui-body">5行 / タイトル＋説明</p>
+              </div>
+              <div class="mini-item">
+                <p class="line1 ui-body">右手練習</p>
+                <p class="line2 ui-body">テーマをゆっくり（♩=60 / 3回）</p>
+              </div>
+              <div class="mini-item">
+                <p class="line1 ui-body">ソプラノ＋バス</p>
+                <p class="line2 ui-body">2声で歌い方をそろえる</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="print-preview">
+          <div class="sheet">
+            <div class="sheet-inner">
+              <div class="sheet-date ui-body">作成日 2026/02/24</div>
+              <table class="plan">
+                <colgroup>
+                  <col class="left" />
+                  <col class="day" /><col class="day" /><col class="day" /><col class="day" /><col class="day" /><col class="day" /><col class="day" />
+                </colgroup>
+                <tbody>
+                  <tr class="section-head">
+                    <td class="section-left ui-heading">インベンション8番</td>
+                    <td class="day ui-body">2/25</td>
+                    <td class="day ui-body">2/26</td>
+                    <td class="day ui-body">2/27</td>
+                    <td class="day ui-body">2/28</td>
+                    <td class="day ui-body">3/1</td>
+                    <td class="day ui-body">3/2</td>
+                    <td class="day ui-body">3/3</td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell">
+                      <div class="practice-wrap">
+                        <p class="practice-title ui-body">右手練習</p>
+                        <p class="practice-desc ui-body">テーマをゆっくり（♩=60 / 3回）</p>
+                      </div>
+                    </td>
+                    <td class="blank"></td><td class="blank"></td><td class="blank"></td><td class="blank"></td><td class="blank"></td><td class="blank"></td><td class="blank"></td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell">
+                      <div class="practice-wrap">
+                        <p class="practice-title ui-body">左手練習</p>
+                        <p class="practice-desc ui-body">和声の流れ確認（音価を保つ）</p>
+                      </div>
+                    </td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell">
+                      <div class="practice-wrap">
+                        <p class="practice-title ui-body">ソプラノ＋バス</p>
+                        <p class="practice-desc ui-body">2声で歌い方をそろえる</p>
+                      </div>
+                    </td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="section-head">
+                    <td class="section-left ui-heading">シンフォニア12番</td>
+                    <td class="day ui-body">2/25</td>
+                    <td class="day ui-body">2/26</td>
+                    <td class="day ui-body">2/27</td>
+                    <td class="day ui-body">2/28</td>
+                    <td class="day ui-body">3/1</td>
+                    <td class="day ui-body">3/2</td>
+                    <td class="day ui-body">3/3</td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell">
+                      <div class="practice-wrap">
+                        <p class="practice-title ui-body">右手練習</p>
+                        <p class="practice-desc ui-body">フレーズごとに区切って確認</p>
+                      </div>
+                    </td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell">
+                      <div class="practice-wrap">
+                        <p class="practice-title ui-body">通し</p>
+                        <p class="practice-desc ui-body">流れ優先 / 止まらない</p>
+                      </div>
+                    </td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="specimen family-b">
+        <header class="specimen-head">
+          <h2 class="ui-heading">B. BIZ UDP明朝 + BIZ UDPゴシック</h2>
+          <p class="meta ui-body">実用寄りクラシカル</p>
+        </header>
+        <div class="phone-ui ui-body">
+          <div class="phone-shell">
+            <div class="phone-top">
+              <span>← 編集</span><span>保存</span>
+            </div>
+            <div class="phone-card">
+              <h3 class="phone-title ui-heading">練習計画</h3>
+              <div class="row"><div class="label">作成日</div><div class="field">2026/02/24</div></div>
+              <div class="row"><div class="label">開始日</div><div class="field">2026/02/25</div></div>
+              <div class="row"><div class="label">日数</div><div class="field small">10日</div></div>
+            </div>
+            <div class="phone-card">
+              <div class="toolbar">
+                <div class="btn ui-body">＋候補から追加</div>
+                <div class="btn ui-body">＋新規</div>
+              </div>
+              <div class="mini-item">
+                <p class="line1 ui-heading">曲1：インベンション8番</p>
+                <p class="line2 ui-body">5行 / タイトル＋説明</p>
+              </div>
+              <div class="mini-item">
+                <p class="line1 ui-body">右手練習</p>
+                <p class="line2 ui-body">テーマをゆっくり（♩=60 / 3回）</p>
+              </div>
+              <div class="mini-item">
+                <p class="line1 ui-body">ソプラノ＋バス</p>
+                <p class="line2 ui-body">2声で歌い方をそろえる</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="print-preview">
+          <div class="sheet">
+            <div class="sheet-inner">
+              <div class="sheet-date ui-body">作成日 2026/02/24</div>
+              <table class="plan">
+                <colgroup>
+                  <col class="left" />
+                  <col class="day" /><col class="day" /><col class="day" /><col class="day" /><col class="day" /><col class="day" /><col class="day" />
+                </colgroup>
+                <tbody>
+                  <tr class="section-head">
+                    <td class="section-left ui-heading">曲1：インベンション8番</td>
+                    <td class="day ui-body">2/25</td>
+                    <td class="day ui-body">2/26</td>
+                    <td class="day ui-body">2/27</td>
+                    <td class="day ui-body">2/28</td>
+                    <td class="day ui-body">3/1</td>
+                    <td class="day ui-body">3/2</td>
+                    <td class="day ui-body">3/3</td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">右手練習</p><p class="practice-desc ui-body">テーマをゆっくり（♩=60 / 3回）</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">左手練習</p><p class="practice-desc ui-body">和声の流れ確認（音価を保つ）</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">ソプラノ＋バス</p><p class="practice-desc ui-body">2声で歌い方をそろえる</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="section-head">
+                    <td class="section-left ui-heading">曲2：シンフォニア12番</td>
+                    <td class="day ui-body">2/25</td>
+                    <td class="day ui-body">2/26</td>
+                    <td class="day ui-body">2/27</td>
+                    <td class="day ui-body">2/28</td>
+                    <td class="day ui-body">3/1</td>
+                    <td class="day ui-body">3/2</td>
+                    <td class="day ui-body">3/3</td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">右手練習</p><p class="practice-desc ui-body">フレーズごとに区切って確認</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">通し</p><p class="practice-desc ui-body">流れ優先 / 止まらない</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="specimen family-c">
+        <header class="specimen-head">
+          <h2 class="ui-heading">C. Hiragino Mincho + Hiragino Sans</h2>
+          <p class="meta ui-body">iPhone自然派</p>
+        </header>
+        <div class="phone-ui ui-body">
+          <div class="phone-shell">
+            <div class="phone-top">
+              <span>← 編集</span><span>保存</span>
+            </div>
+            <div class="phone-card">
+              <h3 class="phone-title ui-heading">練習計画</h3>
+              <div class="row"><div class="label">作成日</div><div class="field">2026/02/24</div></div>
+              <div class="row"><div class="label">開始日</div><div class="field">2026/02/25</div></div>
+              <div class="row"><div class="label">日数</div><div class="field small">10日</div></div>
+            </div>
+            <div class="phone-card">
+              <div class="toolbar">
+                <div class="btn ui-body">＋候補から追加</div>
+                <div class="btn ui-body">＋新規</div>
+              </div>
+              <div class="mini-item">
+                <p class="line1 ui-heading">曲1：インベンション8番</p>
+                <p class="line2 ui-body">5行 / タイトル＋説明</p>
+              </div>
+              <div class="mini-item">
+                <p class="line1 ui-body">右手練習</p>
+                <p class="line2 ui-body">テーマをゆっくり（♩=60 / 3回）</p>
+              </div>
+              <div class="mini-item">
+                <p class="line1 ui-body">ソプラノ＋バス</p>
+                <p class="line2 ui-body">2声で歌い方をそろえる</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="print-preview">
+          <div class="sheet">
+            <div class="sheet-inner">
+              <div class="sheet-date ui-body">作成日 2026/02/24</div>
+              <table class="plan">
+                <colgroup>
+                  <col class="left" />
+                  <col class="day" /><col class="day" /><col class="day" /><col class="day" /><col class="day" /><col class="day" /><col class="day" />
+                </colgroup>
+                <tbody>
+                  <tr class="section-head">
+                    <td class="section-left ui-heading">曲1：インベンション8番</td>
+                    <td class="day ui-body">2/25</td>
+                    <td class="day ui-body">2/26</td>
+                    <td class="day ui-body">2/27</td>
+                    <td class="day ui-body">2/28</td>
+                    <td class="day ui-body">3/1</td>
+                    <td class="day ui-body">3/2</td>
+                    <td class="day ui-body">3/3</td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">右手練習</p><p class="practice-desc ui-body">テーマをゆっくり（♩=60 / 3回）</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">左手練習</p><p class="practice-desc ui-body">和声の流れ確認（音価を保つ）</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">ソプラノ＋バス</p><p class="practice-desc ui-body">2声で歌い方をそろえる</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="section-head">
+                    <td class="section-left ui-heading">曲2：シンフォニア12番</td>
+                    <td class="day ui-body">2/25</td>
+                    <td class="day ui-body">2/26</td>
+                    <td class="day ui-body">2/27</td>
+                    <td class="day ui-body">2/28</td>
+                    <td class="day ui-body">3/1</td>
+                    <td class="day ui-body">3/2</td>
+                    <td class="day ui-body">3/3</td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">右手練習</p><p class="practice-desc ui-body">フレーズごとに区切って確認</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">通し</p><p class="practice-desc ui-body">流れ優先 / 止まらない</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="specimen family-d">
+        <header class="specimen-head">
+          <h2 class="ui-heading">D. Noto Serif JP（全部統一）</h2>
+          <p class="meta ui-body">左案の「インベンション」の字に統一</p>
+        </header>
+        <div class="phone-ui ui-body">
+          <div class="phone-shell">
+            <div class="phone-top">
+              <span>← 編集</span><span>保存</span>
+            </div>
+            <div class="phone-card">
+              <h3 class="phone-title ui-heading">練習計画</h3>
+              <div class="row"><div class="label">作成日</div><div class="field">2026/02/24</div></div>
+              <div class="row"><div class="label">開始日</div><div class="field">2026/02/25</div></div>
+              <div class="row"><div class="label">日数</div><div class="field small">10日</div></div>
+            </div>
+            <div class="phone-card">
+              <div class="toolbar">
+                <div class="btn ui-body">＋候補から追加</div>
+                <div class="btn ui-body">＋新規</div>
+              </div>
+              <div class="mini-item">
+                <p class="line1 ui-heading">曲1：インベンション8番</p>
+                <p class="line2 ui-body">5行 / タイトル＋説明</p>
+              </div>
+              <div class="mini-item">
+                <p class="line1 ui-body">右手練習</p>
+                <p class="line2 ui-body">テーマをゆっくり（♩=60 / 3回）</p>
+              </div>
+              <div class="mini-item">
+                <p class="line1 ui-body">ソプラノ＋バス</p>
+                <p class="line2 ui-body">2声で歌い方をそろえる</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="print-preview">
+          <div class="sheet">
+            <div class="sheet-inner">
+              <div class="sheet-date ui-body">作成日 2026/02/24</div>
+              <table class="plan">
+                <colgroup>
+                  <col class="left" />
+                  <col class="day" /><col class="day" /><col class="day" /><col class="day" /><col class="day" /><col class="day" /><col class="day" />
+                </colgroup>
+                <tbody>
+                  <tr class="section-head">
+                    <td class="section-left ui-heading">曲1：インベンション8番</td>
+                    <td class="day ui-body">2/25</td>
+                    <td class="day ui-body">2/26</td>
+                    <td class="day ui-body">2/27</td>
+                    <td class="day ui-body">2/28</td>
+                    <td class="day ui-body">3/1</td>
+                    <td class="day ui-body">3/2</td>
+                    <td class="day ui-body">3/3</td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">右手練習</p><p class="practice-desc ui-body">テーマをゆっくり（♩=60 / 3回）</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">左手練習</p><p class="practice-desc ui-body">和声の流れ確認（音価を保つ）</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">ソプラノ＋バス</p><p class="practice-desc ui-body">2声で歌い方をそろえる</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr class="section-head">
+                    <td class="section-left ui-heading">曲2：シンフォニア12番</td>
+                    <td class="day ui-body">2/25</td>
+                    <td class="day ui-body">2/26</td>
+                    <td class="day ui-body">2/27</td>
+                    <td class="day ui-body">2/28</td>
+                    <td class="day ui-body">3/1</td>
+                    <td class="day ui-body">3/2</td>
+                    <td class="day ui-body">3/3</td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">右手練習</p><p class="practice-desc ui-body">フレーズごとに区切って確認</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                  <tr>
+                    <td class="left-cell"><div class="practice-wrap"><p class="practice-title ui-body">通し</p><p class="practice-desc ui-body">流れ優先 / 止まらない</p></div></td>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

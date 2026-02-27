@@ -1,0 +1,12 @@
+{
+  "name": "ピアノ練習計画",
+  "short_name": "ピアノ練習",
+  "description": "一人用のピアノ練習計画アプリ（編集・印刷）",
+  "start_url": "./piano_practice_editor_mock_compact.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4eedf",
+  "theme_color": "#f4eedf",
+  "lang": "ja",
+  "orientation": "portrait"
+}
