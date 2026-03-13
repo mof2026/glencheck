@@ -10,9 +10,27 @@ const {
 } = window.PianoPracticeShared;
 
 const main = document.querySelector("main.panel");
+const printBtn = document.getElementById("print-btn");
 const state = loadState();
+const shouldAutoPrint = new URLSearchParams(window.location.search).get("autoprint") === "1";
+
+printBtn?.addEventListener("click", triggerPrint);
 
 render();
+if (shouldAutoPrint) scheduleAutoPrint();
+
+function triggerPrint() {
+  if (typeof window.print !== "function") return;
+  window.print();
+}
+
+function scheduleAutoPrint() {
+  window.setTimeout(() => {
+    window.requestAnimationFrame(() => {
+      triggerPrint();
+    });
+  }, 150);
+}
 
 function render() {
   if (!main) return;

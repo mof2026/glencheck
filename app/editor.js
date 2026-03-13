@@ -52,7 +52,7 @@ init();
 
 function init() {
   state.createdDate = todayLocalISO();
-  if (!state.startDate) state.startDate = state.createdDate;
+  state.startDate = state.createdDate;
   persistStateOnly();
   initDayCountOptions();
   bindEvents();
@@ -116,10 +116,21 @@ function bindEvents() {
   backupExportBtn?.addEventListener("click", exportBackupJson);
   backupImportBtn?.addEventListener("click", () => backupImportFile?.click());
   backupImportFile?.addEventListener("change", handleBackupFileSelected);
-  printLink?.addEventListener("click", () => {
-    collectStateFromInputs();
-    persistStateOnly();
-  });
+  printLink?.addEventListener("click", handleOpenPrintPage);
+}
+
+function handleOpenPrintPage(event) {
+  collectStateFromInputs();
+  persistStateOnly();
+  const href = printLink?.getAttribute("href");
+  if (!href) return;
+
+  event.preventDefault();
+  const targetUrl = new URL(href, window.location.href);
+  targetUrl.searchParams.set("autoprint", "1");
+
+  const opened = window.open(targetUrl.toString(), "_blank", "noopener");
+  if (!opened) window.location.href = targetUrl.toString();
 }
 
 function handleCurveInput() {
